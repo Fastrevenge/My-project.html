@@ -3,38 +3,107 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Мой первый сайт</title>
+  <title>Мой крутой сайт</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
-      background-color: #f4f4f4;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #6a11cb, #2575fc);
+      color: white;
       text-align: center;
-      padding: 50px;
+      padding: 40px;
+      margin: 0;
     }
     h1 {
-      color: #333;
+      font-size: 2.5em;
+      margin-bottom: 20px;
+      text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
     }
-    p {
-      color: #666;
-      font-size: 18px;
+    .card {
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(10px);
+      border-radius: 15px;
+      padding: 25px;
+      max-width: 500px;
+      margin: 20px auto;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.2);
     }
-    .btn {
-      background-color: #4CAF50;
+    input {
+      padding: 10px;
+      margin: 10px;
+      border: none;
+      border-radius: 8px;
+      width: 200px;
+      font-size: 16px;
+    }
+    button {
+      background-color: #ff6b6b;
       color: white;
-      padding: 10px 20px;
-      text-decoration: none;
-      border-radius: 5px;
-      display: inline-block;
-      margin-top: 20px;
+      border: none;
+      padding: 12px 24px;
+      font-size: 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      margin-top: 10px;
+      transition: transform 0.2s, background 0.3s;
     }
-    .btn:hover {
-      background-color: #45a049;
+    button:hover {
+      background-color: #ff5252;
+      transform: scale(1.05);
+    }
+    #greeting, #time, #clickCount {
+      margin-top: 15px;
+      font-size: 18px;
     }
   </style>
 </head>
 <body>
-  <h1>Добро пожаловать!</h1>
-  <p> мой сайт на HTML .</p>
-  <a href="https://example.com" class="btn">Узнать больше</a>
+  <h1>✨ Привет, друг! ✨</h1>
+
+  <div class="card">
+    <p>Напиши своё имя:</p>
+    <input type="text" id="nameInput" placeholder="Твоё имя" />
+    <br />
+    <button onclick="sayHello()">Поприветствовать</button>
+    <div id="greeting"></div>
+  </div>
+
+  <div class="card">
+    <p>Текущее время:</p>
+    <div id="time">Загрузка...</div>
+  </div>
+
+  <div class="card">
+    <p>Нажми кнопку!</p>
+    <button onclick="countClick()">Кликни меня</button>
+    <div id="clickCount">Кликов: 0</div>
+  </div>
+
+  <script>
+    // Приветствие по имени
+    function sayHello() {
+      const name = document.getElementById('nameInput').value.trim();
+      const greetingDiv = document.getElementById('greeting');
+      if (name) {
+        greetingDiv.innerHTML = `Привет, <strong>${name}</strong>! 😊`;
+      } else {
+        greetingDiv.innerHTML = 'Пожалуйста, введи имя!';
+      }
+    }
+
+    // Обновление времени каждую секунду
+    function updateTime() {
+      const now = new Date();
+      document.getElementById('time').textContent = now.toLocaleTimeString('ru-RU');
+    }
+    setInterval(updateTime, 1000);
+    updateTime(); // сразу при загрузке
+
+    // Счётчик кликов
+    let clicks = 0;
+    function countClick() {
+      clicks++;
+      document.getElementById('clickCount').textContent = `Кликов: ${clicks}`;
+    }
+  </script>
 </body>
 </html>
