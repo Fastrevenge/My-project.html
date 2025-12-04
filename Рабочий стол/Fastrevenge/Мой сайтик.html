@@ -3,18 +3,18 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Мой супер-сайт!</title>
+  <title>Мой супер-сайт ++</title>
   <style>
     :root {
-      --bg: linear-gradient(135deg, #6a11cb, #2575fc);
+      --bg: linear-gradient(135deg, #1a2a6c, #b21f1f, #1a2a6c);
       --card-bg: rgba(255, 255, 255, 0.15);
       --text: white;
     }
 
     .light-theme {
-      --bg: linear-gradient(135deg, #f6f7f9, #e0e5ec);
+      --bg: linear-gradient(135deg, #f8f9fa, #e9ecef);
       --card-bg: rgba(0, 0, 0, 0.08);
-      --text: #333;
+      --text: #212529;
     }
 
     body {
@@ -22,68 +22,104 @@
       background: var(--bg);
       color: var(--text);
       text-align: center;
-      padding: 30px;
+      padding: 20px;
       margin: 0;
-      transition: background 0.4s, color 0.4s;
+      transition: background 0.5s, color 0.3s;
+      min-height: 100vh;
+    }
+
+    h1 {
+      margin-top: 10px;
+      font-size: 2.2em;
     }
 
     .card {
       background: var(--card-bg);
       backdrop-filter: blur(10px);
-      border-radius: 15px;
+      border-radius: 16px;
       padding: 20px;
-      max-width: 500px;
-      margin: 15px auto;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.15);
-      transition: background 0.3s;
+      margin: 16px auto;
+      max-width: 520px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+      transition: transform 0.2s;
+    }
+    .card:hover {
+      transform: translateY(-4px);
     }
 
     input, button, .theme-toggle {
-      padding: 10px;
-      margin: 8px;
+      padding: 10px 14px;
+      margin: 8px 4px;
       border: none;
-      border-radius: 8px;
+      border-radius: 10px;
       font-size: 16px;
     }
 
     input {
-      width: 180px;
       background: rgba(255,255,255,0.9);
+      width: 180px;
     }
 
     button, .theme-toggle {
-      background-color: #ff6b6b;
+      background: #ff6b6b;
       color: white;
       cursor: pointer;
-      transition: all 0.2s;
+      transition: all 0.25s;
     }
-
-    button:hover, .theme-toggle:hover {
+    button:hover {
+      background: #ff5252;
       transform: scale(1.05);
-      background-color: #ff5252;
     }
 
     .emoji {
       position: fixed;
-      font-size: 24px;
-      z-index: 100;
+      font-size: 28px;
+      z-index: 1000;
       pointer-events: none;
       animation: fall 3s linear forwards;
     }
-
     @keyframes fall {
-      to {
-        transform: translateY(100vh) rotate(360deg);
-        opacity: 0;
-      }
+      to { transform: translateY(100vh) rotate(360deg); opacity: 0; }
+    }
+
+    /* Часы */
+    .clock {
+      width: 180px;
+      height: 180px;
+      border: 6px solid var(--text);
+      border-radius: 50%;
+      margin: 20px auto;
+      position: relative;
+      background: rgba(0,0,0,0.1);
+    }
+    .hand {
+      position: absolute;
+      bottom: 50%;
+      left: 50%;
+      transform-origin: bottom;
+      border-radius: 10px;
+    }
+    .hour { width: 8px; height: 50px; background: var(--text); margin-left: -4px; }
+    .minute { width: 6px; height: 70px; background: var(--text); margin-left: -3px; }
+    .second { width: 3px; height: 80px; background: #ff6b6b; margin-left: -1.5px; }
+    .center {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 12px;
+      height: 12px;
+      background: var(--text);
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
     }
   </style>
 </head>
 <body id="body">
-  <h1>🌈 Добро пожаловать на мой сайт! 🌈</h1>
+  <h1>🚀 Мой супер-сайт ++</h1>
 
-  <button class="theme-toggle" onclick="toggleTheme()">🌙 / ☀️</button>
+  <button class="theme-toggle" onclick="toggleTheme()">🌙/☀️</button>
 
+  <!-- Приветствие -->
   <div class="card">
     <p>Как тебя зовут?</p>
     <input type="text" id="nameInput" placeholder="Имя" />
@@ -92,83 +128,172 @@
     <div id="greeting"></div>
   </div>
 
+  <!-- Аналоговые часы -->
   <div class="card">
-    <p>Текущее время:</p>
-    <div id="time">Загрузка...</div>
+    <p>Аналоговые часы</p>
+    <div class="clock">
+      <div class="hand hour" id="hourHand"></div>
+      <div class="hand minute" id="minuteHand"></div>
+      <div class="hand second" id="secondHand"></div>
+      <div class="center"></div>
+    </div>
+    <div id="digitalTime"></div>
   </div>
 
+  <!-- Цитата -->
   <div class="card">
-    <p>Цитата дня:</p>
-    <div id="quote">Загрузка мудрости...</div>
-    <button onclick="newQuote()">Новая цитата</button>
+    <p>Цитата дня</p>
+    <div id="quote"></div>
+    <button onclick="newQuote()">🔄</button>
   </div>
 
+  <!-- Погода в Zetland -->
   <div class="card">
-    <button onclick="countClick()">Кликай!</button>
+    <p>🌤 Погода в Zetland</p>
+    <div id="weather">Загрузка...</div>
+  </div>
+
+  <!-- Таймер до Нового года -->
+  <div class="card">
+    <p>⏳ До Нового года 2026</p>
+    <div id="countdown">--:--:--:--</div>
+  </div>
+
+  <!-- Игра "Угадай число" -->
+  <div class="card">
+    <p>🎮 Угадай число от 1 до 10!</p>
+    <input type="number" id="guessInput" min="1" max="10" placeholder="1–10" />
+    <br />
+    <button onclick="checkGuess()">Проверить</button>
+    <div id="guessResult"></div>
+  </div>
+
+  <!-- Кликер и эмодзи -->
+  <div class="card">
+    <button onclick="countClick()">Клик!</button>
     <div id="clickCount">Кликов: 0</div>
+    <button onclick="emojiRain()">Эмодзи-дождь!</button>
   </div>
 
-  <div class="card">
-    <button onclick="emojiRain()">Эмодзи-дождь! 🎉</button>
-  </div>
+  <!-- Звук -->
+  <audio id="clickSound" preload="auto">
+    <source src="data:audio/mpeg;base64,SUQzBAAAAAABEVRYWFgAAAAtAAADY29tbWVudABCaWdTb3VuZEJhbmsuY29tIC8gTGFTb25vdGhlcXVlLm9yZwBURU5DAAAAHQAAA1N3aXRjaCBQbHVzIMKpIE5DSCBTb2Z0d2FyZQBUSVQyAAAABgAAAzIyMzUAVFNTRQAAAA8AAANMYXZmNTcuODMuMTAwAAAAAAAAAAAAAAD/80DEAAAAA0gAAAAATEFNRTMuMTAwVVVVVVVVVVVVVUxBTUUzLjEwMFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVf/zQsRbAAADSAAAAABVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVf/zQMSkAAADSAAAAABVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV" type="audio/mpeg"/>
+  </audio>
+  <label style="color:var(--text); display: block; margin-top: 10px;">
+    <input type="checkbox" id="soundToggle" checked /> Звук при клике
+  </label>
 
   <script>
     // === Тема ===
-    const body = document.getElementById('body');
+    const body = document.body;
     const savedTheme = localStorage.getItem('theme') || 'dark';
-    if (savedTheme === 'light') {
-      body.classList.add('light-theme');
-    }
+    if (savedTheme === 'light') body.classList.add('light-theme');
 
     function toggleTheme() {
       body.classList.toggle('light-theme');
-      const isLight = body.classList.contains('light-theme');
-      localStorage.setItem('theme', isLight ? 'light' : 'dark');
+      localStorage.setItem('theme', body.classList.contains('light-theme') ? 'light' : 'dark');
     }
 
-    // === Имя и приветствие ===
+    // === Приветствие ===
     const savedName = localStorage.getItem('name');
     if (savedName) {
       document.getElementById('nameInput').value = savedName;
-      document.getElementById('greeting').innerHTML = `Рады тебя видеть снова, <strong>${savedName}</strong>! 😊`;
+      document.getElementById('greeting').innerHTML = `Рады видеть, <strong>${savedName}</strong>!`;
     }
-
     function sayHello() {
       const name = document.getElementById('nameInput').value.trim();
-      const greetingDiv = document.getElementById('greeting');
       if (name) {
         localStorage.setItem('name', name);
-        greetingDiv.innerHTML = `Привет, <strong>${name}</strong>! 💫`;
+        document.getElementById('greeting').innerHTML = `Привет, <strong>${name}</strong>!`;
       } else {
-        greetingDiv.innerHTML = 'Пожалуйста, введи имя!';
+        document.getElementById('greeting').textContent = 'Имя не введено!';
       }
     }
 
-    // === Время ===
-    function updateTime() {
+    // === Часы ===
+    function updateClock() {
       const now = new Date();
-      document.getElementById('time').textContent = now.toLocaleTimeString('ru-RU');
+      const hours = now.getHours() % 12;
+      const minutes = now.getMinutes();
+      const seconds = now.getSeconds();
+
+      const hourDeg = (hours * 30) + (minutes * 0.5);
+      const minuteDeg = minutes * 6;
+      const secondDeg = seconds * 6;
+
+      document.getElementById('hourHand').style.transform = `translateX(-50%) rotate(${hourDeg}deg)`;
+      document.getElementById('minuteHand').style.transform = `translateX(-50%) rotate(${minuteDeg}deg)`;
+      document.getElementById('secondHand').style.transform = `translateX(-50%) rotate(${secondDeg}deg)`;
+
+      document.getElementById('digitalTime').textContent = now.toLocaleTimeString('ru-RU');
     }
-    setInterval(updateTime, 1000);
-    updateTime();
+    setInterval(updateClock, 1000);
+    updateClock();
 
     // === Цитаты ===
     const quotes = [
-      "Всё, что не делает тебя сильнее, делает слабее. — Наполеон",
-      "Программирование — это не инструмент, а искусство. — Donald Knuth",
-      "Учись, как будто ты будешь жить вечно. — Махатма Ганди",
-      "Логика доведёт тебя от А до Б. Воображение — куда угодно. — Альберт Эйнштейн",
-      "Компьютеры бесполезны. Они могут только давать ответы. — Пабло Пикассо",
-      "Сделай шаг — и путь начнётся. — Лао-цзы"
+      "Знание — сила. — Фрэнсис Бэкон",
+      "Я мыслю — следовательно, существую. — Декарт",
+      "IT — это не про компьютеры. Это про мышление. — Unknown",
+      "Вера и разум — два крыла, на которых человек летит к истине. — Иоанн Павел II"
     ];
-
     function newQuote() {
-      const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
-      document.getElementById('quote').textContent = `"${randomQuote}"`;
+      document.getElementById('quote').textContent = `"${quotes[Math.floor(Math.random() * quotes.length)]}"`;
     }
-    newQuote(); // загружаем сразу
+    newQuote();
 
-    // === Счётчик кликов ===
+    // === Погода в Zetland (фиктивная) ===
+    function updateWeather() {
+      const temps = [18, 19, 20, 21, 22];
+      const conditions = ['🌤 Облачно', '☀️ Ясно', '🌦 Дождливо', '🌥 Пасмурно'];
+      const temp = temps[Math.floor(Math.random() * temps.length)];
+      const cond = conditions[Math.floor(Math.random() * conditions.length)];
+      document.getElementById('weather').innerHTML = `${cond}, ${temp}°C<br><small>Город Zetland</small>`;
+    }
+    updateWeather();
+    setInterval(updateWeather, 30000); // обновляем каждые 30 сек
+
+    // === Таймер до Нового года 2026 ===
+    function updateCountdown() {
+      const now = new Date();
+      const nextYear = new Date('January 1, 2026 00:00:00');
+      const diff = nextYear - now;
+
+      if (diff <= 0) {
+        document.getElementById('countdown').textContent = 'С Новым годом! 🎉';
+        return;
+      }
+
+      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+      document.getElementById('countdown').textContent =
+        `${days}д ${hours}ч ${minutes}м ${seconds}с`;
+    }
+    setInterval(updateCountdown, 1000);
+    updateCountdown();
+
+    // === Игра "Угадай число" ===
+    let secretNumber = Math.floor(Math.random() * 10) + 1;
+    function checkGuess() {
+      const guess = parseInt(document.getElementById('guessInput').value);
+      const resultDiv = document.getElementById('guessResult');
+      if (isNaN(guess) || guess < 1 || guess > 10) {
+        resultDiv.textContent = 'Введите число от 1 до 10!';
+        return;
+      }
+      if (guess === secretNumber) {
+        resultDiv.innerHTML = '🎉 Правильно! Ты угадал(а)!<br>Новое число загадано.';
+        secretNumber = Math.floor(Math.random() * 10) + 1;
+      } else {
+        resultDiv.textContent = guess > secretNumber ? 'Слишком много!' : 'Слишком мало!';
+      }
+      document.getElementById('guessInput').value = '';
+    }
+
+    // === Счётчик кликов с звуком ===
     let clicks = localStorage.getItem('clicks') || 0;
     clicks = parseInt(clicks);
     document.getElementById('clickCount').textContent = `Кликов: ${clicks}`;
@@ -177,29 +302,27 @@
       clicks++;
       localStorage.setItem('clicks', clicks);
       document.getElementById('clickCount').textContent = `Кликов: ${clicks}`;
+
+      // Проигрываем звук, если включён
+      if (document.getElementById('soundToggle').checked) {
+        const sound = document.getElementById('clickSound');
+        sound.currentTime = 0;
+        sound.play().catch(e => console.log("Звук не проигран:", e));
+      }
     }
 
     // === Эмодзи-дождь ===
     const emojis = ['🦄', '🤖', '✨', '🚀', '🐱', '🎮', '🍕', '🌈', '🎯', '👾'];
-
-    function createEmoji(x) {
-      const emoji = document.createElement('div');
-      emoji.classList.add('emoji');
-      emoji.textContent = emojis[Math.floor(Math.random() * emojis.length)];
-      emoji.style.left = `${x}px`;
-      emoji.style.top = '-50px';
-      document.body.appendChild(emoji);
-
-      // Удаляем эмодзи после анимации
-      setTimeout(() => emoji.remove(), 3000);
-    }
-
     function emojiRain() {
-      for (let i = 0; i < 15; i++) {
+      for (let i = 0; i < 20; i++) {
         setTimeout(() => {
-          const x = Math.random() * window.innerWidth;
-          createEmoji(x);
-        }, i * 150);
+          const emoji = document.createElement('div');
+          emoji.className = 'emoji';
+          emoji.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+          emoji.style.left = Math.random() * window.innerWidth + 'px';
+          document.body.appendChild(emoji);
+          setTimeout(() => emoji.remove(), 3000);
+        }, i * 120);
       }
     }
   </script>
