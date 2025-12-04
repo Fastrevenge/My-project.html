@@ -3,67 +3,92 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Мой крутой сайт</title>
+  <title>Мой супер-сайт!</title>
   <style>
+    :root {
+      --bg: linear-gradient(135deg, #6a11cb, #2575fc);
+      --card-bg: rgba(255, 255, 255, 0.15);
+      --text: white;
+    }
+
+    .light-theme {
+      --bg: linear-gradient(135deg, #f6f7f9, #e0e5ec);
+      --card-bg: rgba(0, 0, 0, 0.08);
+      --text: #333;
+    }
+
     body {
       font-family: 'Segoe UI', sans-serif;
-      background: linear-gradient(135deg, #6a11cb, #2575fc);
-      color: white;
+      background: var(--bg);
+      color: var(--text);
       text-align: center;
-      padding: 40px;
+      padding: 30px;
       margin: 0;
+      transition: background 0.4s, color 0.4s;
     }
-    h1 {
-      font-size: 2.5em;
-      margin-bottom: 20px;
-      text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
-    }
+
     .card {
-      background: rgba(255, 255, 255, 0.15);
+      background: var(--card-bg);
       backdrop-filter: blur(10px);
       border-radius: 15px;
-      padding: 25px;
+      padding: 20px;
       max-width: 500px;
-      margin: 20px auto;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+      margin: 15px auto;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+      transition: background 0.3s;
     }
-    input {
+
+    input, button, .theme-toggle {
       padding: 10px;
-      margin: 10px;
+      margin: 8px;
       border: none;
       border-radius: 8px;
-      width: 200px;
       font-size: 16px;
     }
-    button {
+
+    input {
+      width: 180px;
+      background: rgba(255,255,255,0.9);
+    }
+
+    button, .theme-toggle {
       background-color: #ff6b6b;
       color: white;
-      border: none;
-      padding: 12px 24px;
-      font-size: 16px;
-      border-radius: 8px;
       cursor: pointer;
-      margin-top: 10px;
-      transition: transform 0.2s, background 0.3s;
+      transition: all 0.2s;
     }
-    button:hover {
-      background-color: #ff5252;
+
+    button:hover, .theme-toggle:hover {
       transform: scale(1.05);
+      background-color: #ff5252;
     }
-    #greeting, #time, #clickCount {
-      margin-top: 15px;
-      font-size: 18px;
+
+    .emoji {
+      position: fixed;
+      font-size: 24px;
+      z-index: 100;
+      pointer-events: none;
+      animation: fall 3s linear forwards;
+    }
+
+    @keyframes fall {
+      to {
+        transform: translateY(100vh) rotate(360deg);
+        opacity: 0;
+      }
     }
   </style>
 </head>
-<body>
-  <h1>✨ Привет, друг! ✨</h1>
+<body id="body">
+  <h1>🌈 Добро пожаловать на мой сайт! 🌈</h1>
+
+  <button class="theme-toggle" onclick="toggleTheme()">🌙 / ☀️</button>
 
   <div class="card">
-    <p>Напиши своё имя:</p>
-    <input type="text" id="nameInput" placeholder="Твоё имя" />
+    <p>Как тебя зовут?</p>
+    <input type="text" id="nameInput" placeholder="Имя" />
     <br />
-    <button onclick="sayHello()">Поприветствовать</button>
+    <button onclick="sayHello()">Привет!</button>
     <div id="greeting"></div>
   </div>
 
@@ -73,36 +98,109 @@
   </div>
 
   <div class="card">
-    <p>Нажми кнопку!</p>
-    <button onclick="countClick()">Кликни меня</button>
+    <p>Цитата дня:</p>
+    <div id="quote">Загрузка мудрости...</div>
+    <button onclick="newQuote()">Новая цитата</button>
+  </div>
+
+  <div class="card">
+    <button onclick="countClick()">Кликай!</button>
     <div id="clickCount">Кликов: 0</div>
   </div>
 
+  <div class="card">
+    <button onclick="emojiRain()">Эмодзи-дождь! 🎉</button>
+  </div>
+
   <script>
-    // Приветствие по имени
+    // === Тема ===
+    const body = document.getElementById('body');
+    const savedTheme = localStorage.getItem('theme') || 'dark';
+    if (savedTheme === 'light') {
+      body.classList.add('light-theme');
+    }
+
+    function toggleTheme() {
+      body.classList.toggle('light-theme');
+      const isLight = body.classList.contains('light-theme');
+      localStorage.setItem('theme', isLight ? 'light' : 'dark');
+    }
+
+    // === Имя и приветствие ===
+    const savedName = localStorage.getItem('name');
+    if (savedName) {
+      document.getElementById('nameInput').value = savedName;
+      document.getElementById('greeting').innerHTML = `Рады тебя видеть снова, <strong>${savedName}</strong>! 😊`;
+    }
+
     function sayHello() {
       const name = document.getElementById('nameInput').value.trim();
       const greetingDiv = document.getElementById('greeting');
       if (name) {
-        greetingDiv.innerHTML = `Привет, <strong>${name}</strong>! 😊`;
+        localStorage.setItem('name', name);
+        greetingDiv.innerHTML = `Привет, <strong>${name}</strong>! 💫`;
       } else {
         greetingDiv.innerHTML = 'Пожалуйста, введи имя!';
       }
     }
 
-    // Обновление времени каждую секунду
+    // === Время ===
     function updateTime() {
       const now = new Date();
       document.getElementById('time').textContent = now.toLocaleTimeString('ru-RU');
     }
     setInterval(updateTime, 1000);
-    updateTime(); // сразу при загрузке
+    updateTime();
 
-    // Счётчик кликов
-    let clicks = 0;
+    // === Цитаты ===
+    const quotes = [
+      "Всё, что не делает тебя сильнее, делает слабее. — Наполеон",
+      "Программирование — это не инструмент, а искусство. — Donald Knuth",
+      "Учись, как будто ты будешь жить вечно. — Махатма Ганди",
+      "Логика доведёт тебя от А до Б. Воображение — куда угодно. — Альберт Эйнштейн",
+      "Компьютеры бесполезны. Они могут только давать ответы. — Пабло Пикассо",
+      "Сделай шаг — и путь начнётся. — Лао-цзы"
+    ];
+
+    function newQuote() {
+      const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
+      document.getElementById('quote').textContent = `"${randomQuote}"`;
+    }
+    newQuote(); // загружаем сразу
+
+    // === Счётчик кликов ===
+    let clicks = localStorage.getItem('clicks') || 0;
+    clicks = parseInt(clicks);
+    document.getElementById('clickCount').textContent = `Кликов: ${clicks}`;
+
     function countClick() {
       clicks++;
+      localStorage.setItem('clicks', clicks);
       document.getElementById('clickCount').textContent = `Кликов: ${clicks}`;
+    }
+
+    // === Эмодзи-дождь ===
+    const emojis = ['🦄', '🤖', '✨', '🚀', '🐱', '🎮', '🍕', '🌈', '🎯', '👾'];
+
+    function createEmoji(x) {
+      const emoji = document.createElement('div');
+      emoji.classList.add('emoji');
+      emoji.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+      emoji.style.left = `${x}px`;
+      emoji.style.top = '-50px';
+      document.body.appendChild(emoji);
+
+      // Удаляем эмодзи после анимации
+      setTimeout(() => emoji.remove(), 3000);
+    }
+
+    function emojiRain() {
+      for (let i = 0; i < 15; i++) {
+        setTimeout(() => {
+          const x = Math.random() * window.innerWidth;
+          createEmoji(x);
+        }, i * 150);
+      }
     }
   </script>
 </body>
